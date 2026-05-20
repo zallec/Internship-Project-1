@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d0c4pxppp4d5r"]
+
+[ext_resource type="Script" uid="uid://c28il7y0tkr5p" path="res://scenes/scripts/mouse.gd" id="1_ouscy"]
+[ext_resource type="Texture2D" uid="uid://wnyd46ee6xnj" path="res://assets/sprites/mouse.webp" id="2_xa71f"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ouscy"]
+radius = 4.0
+
+[node name="Cursor" type="Area2D" unique_id=217732197]
+disable_mode = 2
+script = ExtResource("1_ouscy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=527595890]
+shape = SubResource("CircleShape2D_ouscy")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=833554618]
+position = Vector2(0, -2.842171e-14)
+scale = Vector2(0.024358978, 0.01857143)
+texture = ExtResource("2_xa71f")

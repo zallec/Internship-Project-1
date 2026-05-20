@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://chn6te4kg30sv"]
+
+[ext_resource type="Script" uid="uid://bywcif0gvjyrh" path="res://scenes/scripts/playerWall.gd" id="1_qo04n"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
+
+[node name="PlayerWall" type="Area2D" unique_id=492150251]
+script = ExtResource("1_qo04n")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1208960590]
+shape = SubResource("RectangleShape2D_jorrf")
+script = ExtResource("1_qo04n")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1786283855]

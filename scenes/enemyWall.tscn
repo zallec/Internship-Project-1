@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://d0muvby2lw2ab"]
+
+[ext_resource type="Script" uid="uid://ca7troc3jxtyu" path="res://scenes/scripts/enemyWall.gd" id="1_m24gv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
+
+[node name="EnemyWall" type="Area2D" unique_id=492150251]
+script = ExtResource("1_m24gv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1208960590]
+shape = SubResource("RectangleShape2D_jorrf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1786283855]
