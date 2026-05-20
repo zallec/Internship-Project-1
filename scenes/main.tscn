@@ -3,13 +3,14 @@
 [ext_resource type="PackedScene" uid="uid://d0c4pxppp4d5r" path="res://scenes/mouse.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://chn6te4kg30sv" path="res://scenes/playerWall.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://8c3ku6s1wgik" path="res://scenes/ball.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://d0muvby2lw2ab" path="res://scenes/enemyWall.tscn" id="4_jyhfs"]
 
 [sub_resource type="GDScript" id="GDScript_uwrxv"]
 script/source = "extends Node2D
 
 
 var score: int
-@export var game_scene: PackedScene
+@export var ball_scene: PackedScene
 var screen_center: Vector2
 
 
@@ -25,14 +26,36 @@ func _process(_delta: float) -> void:
 
 
 func game_over() -> void:
-	$BallSpawnRate.stop()
+	# stop all functions
+	pass
 
 
 func new_game() -> void:
 	score = 0
-	$Cursor.start() 
-	$startDelay.start()
+	$Cursor.start()
+	$PlayerWall.start()
+	$EnemyWall.start() 
+	$StartDelay.start()
+
+
+func _on_start_delay_timeout() -> void:
+	#spawn_ball()
+	pass
+
+func spawn_ball() -> void:
+	var BALL_START_POSITION: Vector2 = screen_center
+	$Ball.start()
+	var ball: Node = ball_scene.instantiate()
+	ball.position = BALL_START_POSITION
+	var direction: float = ball.position.angle_to_point(randf_range(PI * 2, 0))
+	var velocity: Vector2 = Vector2(randf_range(150.0, 200.0), 0.0)
+	ball.linear_velocity = velocity.rotated(direction)
+	
+	add_child(ball)
+	print(\"spawn angle: \", rad_to_deg(direction))
 "
+
+[sub_resource type="PackedScene" id="PackedScene_jyhfs"]
 
 [sub_resource type="GDScript" id="GDScript_yqjtg"]
 script/source = "extends Camera2D
@@ -56,6 +79,7 @@ point_count = 6
 
 [node name="Main" type="Node2D" unique_id=2136180204]
 script = SubResource("GDScript_uwrxv")
+ball_scene = SubResource("PackedScene_jyhfs")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1731760051]
 editor_draw_limits = true
@@ -86,5 +110,7 @@ rotation = 2.3663416
 [node name="Ball" parent="." unique_id=787457636 instance=ExtResource("3_sugp2")]
 position = Vector2(-758, -57)
 
-[connection signal="timeout" from="BallSpawnRate" to="." method="_on_fruit_spawn_rate_timeout"]
+[node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
+position = Vector2(-766, 9)
+
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
