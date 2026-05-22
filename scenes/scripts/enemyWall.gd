@@ -8,8 +8,8 @@ var ball: Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_height = get_viewport_rect().size.y
-	ball = get_node("res://scenes/ball")
-	position = Vector2(-348,0)
+	ball = get_parent().get_node("Ball")
+	position = Vector2(348,0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,9 +27,7 @@ func _physics_process(delta: float) -> void:
 	# if collides with object
 	#for area in get_overlapping_bodies():
 		#if area.is_in_group("ball"):
-			
-		#if area.is_in_group("enemy"):
-			
+		
 
 func start() -> void:
 	show()
