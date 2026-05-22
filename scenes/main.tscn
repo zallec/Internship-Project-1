@@ -94,6 +94,7 @@ one_shot = true
 autostart = true
 
 [node name="StartPos" type="Marker2D" parent="." unique_id=1912251813]
+visible = false
 position = Vector2(-350, 0)
 
 [node name="EnemyPath" type="Path2D" parent="." unique_id=156622855]
@@ -106,11 +107,12 @@ position = Vector2(153.99805, -8.602631)
 rotation = 2.3663416
 
 [node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
+position = Vector2(-348, 0)
 
 [node name="Ball" parent="." unique_id=787457636 instance=ExtResource("3_sugp2")]
-position = Vector2(-758, -57)
+position = Vector2(-742, 11)
 
 [node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
-position = Vector2(-766, 9)
+position = Vector2(348, 0)
 
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]

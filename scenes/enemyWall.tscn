@@ -4,10 +4,17 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
 
-[node name="EnemyWall" type="Area2D" unique_id=492150251]
+[node name="enemyWall" type="CharacterBody2D" unique_id=2057786081]
 script = ExtResource("1_m24gv")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1208960590]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1469816695]
 shape = SubResource("RectangleShape2D_jorrf")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1786283855]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1677342442]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1317385821]
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 21.0
+offset_bottom = 21.0
+metadata/_edit_use_anchors_ = true
