@@ -9,7 +9,7 @@ var ball: Node2D
 func _ready() -> void:
 	screen_height = get_viewport_rect().size.y
 	ball = get_parent().get_node("Ball")
-	position = Vector2(348,0)
+	position = Vector2(939,323)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0
 
 	move_and_slide()
-	position.y = clamp(position.y, -(screen_height / 2), 298)
+	position.y = clamp(position.y, 0, screen_height)
 	
 	# if collides with object
 	#for area in get_overlapping_bodies():

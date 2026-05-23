@@ -10,7 +10,7 @@ func _ready() -> void:
 	screen_height = screen_size.y
 	print("screen_height: ", screen_height)
 	print("position: ", position)
-	position = Vector2(-348,0)
+	position = Vector2(211,323)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,10 +23,9 @@ func _physics_process(delta: float) -> void:
 
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
-		
-	var wall_height: int = 40
+	
 	move_and_slide()
-	position.y = clamp(position.y, -(screen_height / 2), 298)
+	position.y = clamp(position.y, 0, screen_height)
 	
 	# if collides with object
 	#for area in get_overlapping_bodies():

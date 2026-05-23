@@ -4,7 +4,7 @@ extends CharacterBody2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	position = Vector2(0,0)
+	position = Vector2(576,323)
 	var direction: float = randf_range(-PI, PI)
 	velocity = Vector2(SPEED, 0.0).rotated(direction)
 

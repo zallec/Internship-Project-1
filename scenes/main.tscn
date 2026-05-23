@@ -47,7 +47,6 @@ func spawn_ball() -> void:
 	var ball: Node = ball_scene.instantiate()
 	
 	add_child(ball)
-	print(\"spawn angle: \", rad_to_deg(direction))
 "
 
 [sub_resource type="PackedScene" id="PackedScene_jyhfs"]
@@ -66,49 +65,65 @@ func _process(_delta: float) -> void:
 	pass
 "
 
-[sub_resource type="Curve2D" id="Curve2D_o5qli"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 153.99805, -8.602631, 0, 0, 0, 0, 141.63324, 3.513754, 0, 0, 0, 0, 141.63324, 14.903155, 0, 0, 0, 0, 138.26105, 27.383032, 0, 0, 0, 0, 134.1633, 52.38039, 0, 0, 0, 0, 141.55807, 66.0501)
-}
-point_count = 6
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jyhfs"]
+normal = Vector2(-0.0017574666, -0.9999985)
+distance = -314.52023
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tbgi4"]
+normal = Vector2(0.999993, 0.0037313174)
+distance = -565.0259
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tefeu"]
+normal = Vector2(0.0033333148, 0.9999944)
+distance = -326.99155
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o6xl0"]
+normal = Vector2(-0.9999396, -0.010988347)
+distance = -573.9214
 
 [node name="Main" type="Node2D" unique_id=2136180204]
 script = SubResource("GDScript_uwrxv")
 ball_scene = SubResource("PackedScene_jyhfs")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1731760051]
-position = Vector2(1, -9)
+position = Vector2(576, 323)
 editor_draw_limits = true
 script = SubResource("GDScript_yqjtg")
 
 [node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
-[node name="BallSpawnRate" type="Timer" parent="." unique_id=939661060]
-
 [node name="StartDelay" type="Timer" parent="." unique_id=597731998]
 one_shot = true
 autostart = true
 
-[node name="StartPos" type="Marker2D" parent="." unique_id=1912251813]
-visible = false
-position = Vector2(-350, 0)
-
-[node name="EnemyPath" type="Path2D" parent="." unique_id=156622855]
-position = Vector2(249.00002, -238)
-scale = Vector2(0.9466078, 8.266452)
-curve = SubResource("Curve2D_o5qli")
-
-[node name="EnemyMovementPath" type="PathFollow2D" parent="EnemyPath" unique_id=1241570860]
-position = Vector2(153.99805, -8.602631)
-rotation = 2.3663416
-
 [node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
-position = Vector2(-344, -3)
+position = Vector2(217, 322)
 
 [node name="Ball" parent="." unique_id=787457636 instance=ExtResource("3_sugp2")]
 position = Vector2(-742, 11)
+SPEED = 400.0
 
 [node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
-position = Vector2(348, 0)
+position = Vector2(939, 323)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=477861045]
+position = Vector2(572, 332)
+
+[node name="BottomBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1143965333]
+position = Vector2(4.5, -5.5)
+shape = SubResource("WorldBoundaryShape2D_jyhfs")
+
+[node name="LeftBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1594926545]
+shape = SubResource("WorldBoundaryShape2D_tbgi4")
+
+[node name="TopBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1530266880]
+shape = SubResource("WorldBoundaryShape2D_tefeu")
+
+[node name="RightBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1451515917]
+shape = SubResource("WorldBoundaryShape2D_o6xl0")
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=642097021]
+offset_right = 8.0
+offset_bottom = 8.0
 
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
