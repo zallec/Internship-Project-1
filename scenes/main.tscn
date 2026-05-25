@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://chn6te4kg30sv" path="res://scenes/playerWall.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://8c3ku6s1wgik" path="res://scenes/ball.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://d0muvby2lw2ab" path="res://scenes/enemyWall.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://da7b4u1l722d4" path="res://scenes/score_board.tscn" id="5_tbgi4"]
 
 [sub_resource type="GDScript" id="GDScript_uwrxv"]
 script/source = "extends Node2D
@@ -11,7 +12,9 @@ script/source = "extends Node2D
 
 var score: int
 @export var ball_scene: PackedScene
+@onready var scoreBoard: Node = $scoreBoard
 var screen_center: Vector2
+signal ball_spawned(ball: Node)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -33,23 +36,43 @@ func game_over() -> void:
 func new_game() -> void:
 	score = 0
 	$Cursor.start()
-	$PlayerWall.start()
-	$EnemyWall.start() 
 	$StartDelay.start()
 
 
 func _on_start_delay_timeout() -> void:
-	#spawn_ball()
-	pass
+	$PlayerWall.start()
+	$EnemyWall.start() 
+
 
 func spawn_ball() -> void:
-	$Ball.start()
 	var ball: Node = ball_scene.instantiate()
-	
+	ball.name = \"Ball\"
 	add_child(ball)
-"
+	ball._start()
+	emit_signal(\"ball_spawned\", ball)
+	
 
-[sub_resource type="PackedScene" id="PackedScene_jyhfs"]
+func reset_ball() -> void:
+	var ballToRemove: Node = get_node_or_null(\"Ball\")
+	if ballToRemove:
+		ballToRemove.queue_free()
+		# small delay to get enemyWall to track new Ball
+		await get_tree().process_frame
+		await get_tree().process_frame
+	spawn_ball()
+
+
+func _on_goal_left_body_entered(body: Node2D) -> void:
+	if body.name == \"Ball\":
+		#scoreBoard.increaseScore() for enemy controller
+		reset_ball()
+
+
+func _on_goal_right_body_entered(body: Node2D) -> void:
+	if body.name == \"Ball\":
+		scoreBoard.increaseScore()
+		reset_ball()
+"
 
 [sub_resource type="GDScript" id="GDScript_yqjtg"]
 script/source = "extends Camera2D
@@ -81,9 +104,12 @@ distance = -326.99155
 normal = Vector2(-0.9999396, -0.010988347)
 distance = -573.9214
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
+size = Vector2(20, 638)
+
 [node name="Main" type="Node2D" unique_id=2136180204]
 script = SubResource("GDScript_uwrxv")
-ball_scene = SubResource("PackedScene_jyhfs")
+ball_scene = ExtResource("3_sugp2")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1731760051]
 position = Vector2(576, 323)
@@ -105,6 +131,7 @@ SPEED = 400.0
 
 [node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
 position = Vector2(939, 323)
+speed = 50.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=477861045]
 position = Vector2(572, 332)
@@ -122,8 +149,22 @@ shape = SubResource("WorldBoundaryShape2D_tefeu")
 [node name="RightBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1451515917]
 shape = SubResource("WorldBoundaryShape2D_o6xl0")
 
-[node name="TextEdit" type="TextEdit" parent="." unique_id=642097021]
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288]
+position = Vector2(27, 22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal_Left" unique_id=485443973]
+position = Vector2(24, 302)
+shape = SubResource("RectangleShape2D_jyhfs")
+
+[node name="Goal_Right" type="Area2D" parent="." unique_id=1116292428]
+position = Vector2(1073, 22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal_Right" unique_id=1147072880]
+position = Vector2(24, 302)
+shape = SubResource("RectangleShape2D_jyhfs")
+
+[node name="scoreBoard" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
 
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
+[connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]
+[connection signal="body_entered" from="Goal_Right" to="." method="_on_goal_right_body_entered"]

@@ -3,17 +3,21 @@ extends CharacterBody2D
 # !!! Needs movement clamped between top and bottom of screen
 @export var speed: float = 400 #export allows editing this variable from the inspector
 var screen_height: float
-var ball: Node2D
+var ball: Node2D = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_height = get_viewport_rect().size.y
-	ball = get_parent().get_node("Ball")
+	get_parent().ball_spawned.connect(_on_ball_spawned)
 	position = Vector2(939,323)
 
+func _on_ball_spawned(new_ball: Node) -> void:
+	ball = new_ball
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
+	if ball == null:
+		return
 	if ball.position.y > position.y + 10:  # Dead zone prevents jittering
 		velocity.y = speed
 	elif ball.position.y < position.y - 10:
@@ -23,6 +27,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	position.y = clamp(position.y, 0, screen_height)
+	velocity.x = 0
 	
 	# if collides with object
 	#for area in get_overlapping_bodies():
