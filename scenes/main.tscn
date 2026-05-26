@@ -13,6 +13,8 @@ script/source = "extends Node2D
 @export var ball_scene: PackedScene
 @onready var player_scoreBoard: Node = $scoreBoardPlayer
 @onready var bot_scoreBoard: Node = $scoreBoardBot
+@export var enemyWall_spawn_delay: int = 1
+@export var ball_spawn_delay: int = 1
 var score: int
 var screen_center: Vector2
 signal ball_spawned(ball: Node)
@@ -20,7 +22,8 @@ signal ball_spawned(ball: Node)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	screen_center = $Camera2D.global_position
+	screen_center = get_viewport_rect().size / 2
+	
 	new_game()
 
 
@@ -35,43 +38,90 @@ func game_over() -> void:
 
 
 func new_game() -> void:
-	score = 0
-	$StartDelay.start()
+	$PlayerWall.start()
+	$EnemyWall.start() 
+	
+	# freeze enemy wall to avoid initial ball-tracking issues
+	$EnemyWall.set_physics_process(false)
+	
+	# temporarily disabling goals to deal with initial ball spawn at 0,0 problem
+	print(\"goals disabled\")
+	$Goal_Left.monitoring = false
+	$Goal_Right.monitoring = false
+	
+	spawn_ball()
+	await get_tree().create_timer(enemyWall_spawn_delay).timeout
+	$EnemyWall.set_physics_process(true)
+	
+	# delay before setting ball physics
+	await get_tree().create_timer(ball_spawn_delay).timeout
+	var ball: Node = get_node_or_null(\"Ball\")
+	if ball:
+		ball._start()
+		ball.set_physics_process(true)
+	
+	# enable goals after ball is launched to avoid initial ball spawn at 0,0 problem
+	$Goal_Left.monitoring = true
+	$Goal_Right.monitoring = true
+	print(\"goals enabled\")
 
 
 func _on_start_delay_timeout() -> void:
-	$PlayerWall.start()
-	$EnemyWall.start() 
-	#spawn_ball()
+	pass
 
 
 func spawn_ball() -> void:
+	# initialize ball  node
 	var ball: Node = ball_scene.instantiate()
 	ball.name = \"Ball\"
+	ball.position = screen_center
 	add_child(ball)
-	ball._start()
-	emit_signal(\"ball_spawned\", ball)
-	
+	# call_deferred waits until next frame for the enemyWall to start tracking the ball
+	$EnemyWall.ball = ball
+	print(\"ball spawned at \", ball.position)
+
 
 func reset_ball() -> void:
+	$EnemyWall.ball = null
 	var ballToRemove: Node = get_node_or_null(\"Ball\")
 	if ballToRemove:
+		ballToRemove.set_physics_process(false)
 		ballToRemove.queue_free()
-		# small delay to get enemyWall to track new Ball
-		await get_tree().process_frame
-		await get_tree().process_frame
+		
+	# small delay to get enemyWall to track new Ball
+	await get_tree().process_frame
+	print(\"ball reset\")
 	spawn_ball()
+	# delay before setting ball physics
+	await get_tree().create_timer(ball_spawn_delay).timeout
+	var ball: Node = get_node_or_null(\"Ball\")
+	if ball:
+		ball._start()
+		ball.set_physics_process(true)
+
+
+func tempDisableGoals() -> void:
+	# supposed to deal with the immediate score by bot goal 
+	print(\"temp disabling goals\")
+	$Goal_Left.monitoring = false
+	$Goal_Right.monitoring = false
+	await get_tree().process_frame
+	$Goal_Left.monitoring = true
+	$Goal_Right.monitoring = true
+	print(\"goals enabled\")
 
 
 func _on_goal_left_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
 		bot_scoreBoard.increaseScore()
+		print(\"! bot scored !\")
 		reset_ball()
 
 
 func _on_goal_right_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
 		player_scoreBoard.increaseScore()
+		print(\"! player scored !\")
 		reset_ball()
 "
 
@@ -120,11 +170,10 @@ script = SubResource("GDScript_yqjtg")
 [node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
 [node name="StartDelay" type="Timer" parent="." unique_id=597731998]
-wait_time = 3.0
 one_shot = true
 
 [node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
-position = Vector2(-119, -39)
+position = Vector2(568, -44)
 
 [node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
 position = Vector2(217, 322)
@@ -133,7 +182,7 @@ scale = Vector2(0.5, 2)
 [node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
 position = Vector2(939, 323)
 scale = Vector2(0.5, 2)
-speed = 50.0
+speed = 150.0
 
 [node name="Borders" type="StaticBody2D" parent="." unique_id=477861045]
 position = Vector2(572, 332)

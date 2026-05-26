@@ -7,15 +7,15 @@ var ball: Node2D = null
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_height = get_viewport_rect().size.y
-	get_parent().ball_spawned.connect(_on_ball_spawned)
-	position = Vector2(939,323)
+	position.x = 939
+	position.y = screen_height / 2
 
 func _on_ball_spawned(new_ball: Node) -> void:
 	ball = new_ball
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-	if ball == null:
+	if ball == null or not is_instance_valid(ball):
 		return
 	if ball.position.y > position.y + 10:
 		velocity.y = speed
