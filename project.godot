@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="InternshipProjectWeek1"
-run/main_scene="uid://5sl36bs56vvj"
+run/main_scene="uid://bpvdm467qqjj1"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

@@ -19,9 +19,9 @@ func _physics_process(delta: float) -> void:
 		
 
 func _start() -> void:
-	position = Vector2(576,323)
+	position = get_viewport_rect().size / 2
 	speed = 300
-	var angle: float = randf_range(-PI/4, PI/4)
+	var angle: float = randf_range(-PI/6, PI/6)
 	if randi() % 2 == 0:
 		angle += PI
 	direction = Vector2(cos(angle), sin(angle))

@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://bpvdm467qqjj1"]
+
+[ext_resource type="Script" uid="uid://bd12qppk25av0" path="res://scenes/scripts/main_menu.gd" id="1_l6cm7"]
+
+[node name="MainMenu" type="Control" unique_id=346110860]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6cm7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=642965153]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 125.0
+offset_right = 758.0
+offset_bottom = 532.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ButtonPlay" type="Button" parent="VBoxContainer" unique_id=1832275354]
+custom_minimum_size = Vector2(10, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "PLAY"
+
+[node name="ButtonDifficulty" type="Button" parent="VBoxContainer" unique_id=1507124532]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "DIFFICULTY"
+
+[node name="ButtonQuit" type="Button" parent="VBoxContainer" unique_id=1118115675]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "QUIT"
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1877522275]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 52.0
+offset_right = 759.0
+offset_bottom = 135.0
+
+[node name="Label" type="Label" parent="CenterContainer" unique_id=1881772449]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+theme_override_font_sizes/font_size = 60
+text = "PONG"
+horizontal_alignment = 1
+uppercase = true
+
+[connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_button_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonDifficulty" to="." method="_on_button_difficulty_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonQuit" to="." method="_on_button_quit_pressed"]

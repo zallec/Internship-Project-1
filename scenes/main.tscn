@@ -10,9 +10,10 @@
 script/source = "extends Node2D
 
 
-var score: int
 @export var ball_scene: PackedScene
-@onready var scoreBoard: Node = $scoreBoard
+@onready var player_scoreBoard: Node = $scoreBoardPlayer
+@onready var bot_scoreBoard: Node = $scoreBoardBot
+var score: int
 var screen_center: Vector2
 signal ball_spawned(ball: Node)
 
@@ -35,7 +36,6 @@ func game_over() -> void:
 
 func new_game() -> void:
 	score = 0
-	$Cursor.start()
 	$StartDelay.start()
 
 
@@ -64,13 +64,13 @@ func reset_ball() -> void:
 
 func _on_goal_left_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
-		#scoreBoard.increaseScore() for enemy controller
+		bot_scoreBoard.increaseScore()
 		reset_ball()
 
 
 func _on_goal_right_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
-		scoreBoard.increaseScore()
+		player_scoreBoard.increaseScore()
 		reset_ball()
 "
 
@@ -124,28 +124,27 @@ autostart = true
 
 [node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
 position = Vector2(217, 322)
-
-[node name="Ball" parent="." unique_id=787457636 instance=ExtResource("3_sugp2")]
-position = Vector2(-742, 11)
+scale = Vector2(0.5, 2)
 
 [node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
 position = Vector2(939, 323)
+scale = Vector2(0.5, 2)
 speed = 50.0
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=477861045]
+[node name="Borders" type="StaticBody2D" parent="." unique_id=477861045]
 position = Vector2(572, 332)
 
-[node name="BottomBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1143965333]
+[node name="BottomBorder" type="CollisionShape2D" parent="Borders" unique_id=1143965333]
 position = Vector2(4.5, -5.5)
 shape = SubResource("WorldBoundaryShape2D_jyhfs")
 
-[node name="LeftBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1594926545]
+[node name="LeftBorder" type="CollisionShape2D" parent="Borders" unique_id=1594926545]
 shape = SubResource("WorldBoundaryShape2D_tbgi4")
 
-[node name="TopBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1530266880]
+[node name="TopBorder" type="CollisionShape2D" parent="Borders" unique_id=1530266880]
 shape = SubResource("WorldBoundaryShape2D_tefeu")
 
-[node name="RightBorder" type="CollisionShape2D" parent="StaticBody2D" unique_id=1451515917]
+[node name="RightBorder" type="CollisionShape2D" parent="Borders" unique_id=1451515917]
 shape = SubResource("WorldBoundaryShape2D_o6xl0")
 
 [node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288]
@@ -162,7 +161,15 @@ position = Vector2(1073, 22)
 position = Vector2(24, 302)
 shape = SubResource("RectangleShape2D_jyhfs")
 
-[node name="scoreBoard" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
+[node name="scoreBoardPlayer" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
+follow_viewport_scale = 186.185
+
+[node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
+follow_viewport_scale = 186.185
+position = Vector2(500, 20)
+
+[node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
+position = Vector2(-119, -39)
 
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
 [connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]
