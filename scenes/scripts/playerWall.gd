@@ -7,32 +7,21 @@ var screen_height: float
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var screen_size: Vector2 = get_viewport_rect().size
-	screen_height = screen_size.y
-	print("screen_height: ", screen_height)
-	print("position: ", position)
-	position = Vector2(211,323)
+	screen_height = screen_size.y # 648
+	position = Vector2(211,screen_height / 2)
+
+
+func start() -> void:
+	show()
+	
+	
+func getVerticalDirection() -> float:
+	return Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_down"):
-		velocity.y += 1
-	if Input.is_action_pressed("move_up"):
-		velocity.y -= 1
-
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-	
-	move_and_slide()
+	var direction: Vector2 = Vector2(0, getVerticalDirection())
+	velocity = direction * speed
 	position.y = clamp(position.y, 0, screen_height)
-	
-	# if collides with object
-	#for area in get_overlapping_bodies():
-		#if area.is_in_group("ball"):
-			
-		#if area.is_in_group("enemy"):
-			
-
-func start() -> void:
-	show()
+	move_and_slide()
