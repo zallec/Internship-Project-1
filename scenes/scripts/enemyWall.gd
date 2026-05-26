@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
-# !!! Needs movement clamped between top and bottom of screen
-@export var speed: float = 400 #export allows editing this variable from the inspector
+@export var speed: float = 400
 var screen_height: float
 var ball: Node2D = null
 
@@ -18,7 +17,7 @@ func _on_ball_spawned(new_ball: Node) -> void:
 func _physics_process(_delta: float) -> void:
 	if ball == null:
 		return
-	if ball.position.y > position.y + 10:  # Dead zone prevents jittering
+	if ball.position.y > position.y + 10:
 		velocity.y = speed
 	elif ball.position.y < position.y - 10:
 		velocity.y = -speed

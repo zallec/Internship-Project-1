@@ -42,6 +42,7 @@ func new_game() -> void:
 func _on_start_delay_timeout() -> void:
 	$PlayerWall.start()
 	$EnemyWall.start() 
+	#spawn_ball()
 
 
 func spawn_ball() -> void:
@@ -119,8 +120,11 @@ script = SubResource("GDScript_yqjtg")
 [node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
 [node name="StartDelay" type="Timer" parent="." unique_id=597731998]
+wait_time = 3.0
 one_shot = true
-autostart = true
+
+[node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
+position = Vector2(-119, -39)
 
 [node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
 position = Vector2(217, 322)
@@ -167,9 +171,6 @@ follow_viewport_scale = 186.185
 [node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
 follow_viewport_scale = 186.185
 position = Vector2(500, 20)
-
-[node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
-position = Vector2(-119, -39)
 
 [connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
 [connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]

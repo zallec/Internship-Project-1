@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-# !!! Needs movement clamped between top and bottom of screen
-@export var speed: float = 400 #export allows editing this variable from the inspector
+
+@export var speed: float = 400
 var screen_height: float
 
 # Called when the node enters the scene tree for the first time.
@@ -15,7 +15,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	velocity = Vector2.ZERO # The player's movement vector.
+	velocity = Vector2.ZERO
 	if Input.is_action_pressed("move_down"):
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
