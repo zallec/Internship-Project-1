@@ -3,22 +3,25 @@
 [ext_resource type="Script" uid="uid://bywcif0gvjyrh" path="res://scenes/scripts/playerWall.gd" id="1_qo04n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
-size = Vector2(14, 40)
+size = Vector2(10, 40)
 
 [node name="playerWall" type="CharacterBody2D" unique_id=2057786081]
+motion_mode = 1
+platform_on_leave = 2
 script = ExtResource("1_qo04n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1469816695]
-position = Vector2(-2.5, 21)
-scale = Vector2(0.5, 2)
 shape = SubResource("RectangleShape2D_jorrf")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1677342442]
-
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1317385821]
-offset_left = -19.0
-offset_top = -19.0
-offset_right = 21.0
-offset_bottom = 21.0
-scale = Vector2(0.5, 2)
-metadata/_edit_use_anchors_ = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -20.0
+offset_right = 5.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -3,17 +3,31 @@
 [ext_resource type="Script" uid="uid://rcmbcj3h8xdq" path="res://scenes/scripts/ball.gd" id="1_7s4qf"]
 [ext_resource type="Texture2D" uid="uid://b7g8ykurb1kg5" path="res://assets/sprites/ball.png" id="2_cxlvu"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
-radius = 9.666667
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cxlvu"]
+size = Vector2(15, 15)
 
 [node name="Ball" type="CharacterBody2D" unique_id=1366729709]
 motion_mode = 1
 script = ExtResource("1_7s4qf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2094439841]
-scale = Vector2(3, 3)
-shape = SubResource("CircleShape2D_cxlvu")
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_cxlvu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=165624682]
-scale = Vector2(0.2, 0.2)
+visible = false
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("2_cxlvu")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=333280169]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.5
+offset_top = -7.5
+offset_right = 7.5
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2

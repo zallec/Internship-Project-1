@@ -22,7 +22,6 @@ var screen_center: Vector2
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_center = get_viewport_rect().size / 2
-	
 	new_game()
 
 
@@ -37,78 +36,40 @@ func game_over() -> void:
 
 
 func new_game() -> void:
-	# first, initialize ball to get enemyWall to track
-	spawn_ball()
-	
+	# initialize
 	$PlayerWall.start()
+	# set ball to track
 	$EnemyWall.start() 
+	$EnemyWall.ball = $Ball
 	
-	# delay before setting ball physics
-	#await get_tree().create_timer(ball_spawn_delay).timeout
-	var ball: Node = get_node_or_null(\"Ball\")
-	if ball:
-		ball.start()
-		ball.set_physics_process(true)
 
 
 func _on_start_delay_timeout() -> void:
 	pass
 
 
-func spawn_ball() -> void:
-	# initialize ball  node
-	var ball: Node = ball_scene.instantiate()
-	ball.name = \"Ball\"
-	ball.position = screen_center
-	add_child(ball)
-	ball.get_node(\"CollisionShape2D\").disabled = true
-	# call_deferred waits until next frame for the enemyWall to start tracking the ball
-	#await get_tree().create_timer(ball_spawn_delay).timeout
-	var new_ball: Node = get_node_or_null(\"Ball\")
-	if new_ball:
-		new_ball.start()
-		new_ball.set_physics_process(true)
-		new_ball.get_node(\"CollisionShape2D\").disabled = false
-		$EnemyWall.ball = new_ball
-	print(\"ball spawned at \", ball.position)
-
-
-func reset_ball() -> void:
-	$EnemyWall.ball = null
-	var ballToRemove: Node = get_node_or_null(\"Ball\")
-	if ballToRemove:
-		ballToRemove.set_physics_process(false)
-		ballToRemove.queue_free()
-		
-	# small delay to get enemyWall to track new Ball
-	await get_tree().process_frame
-	print(\"ball reset\")
-	spawn_ball()
-	# delay before setting ball physics
-	#await get_tree().create_timer(ball_spawn_delay).timeout
-	var ball: Node = get_node_or_null(\"Ball\")
-	if ball:
-		ball.start()
-		ball.set_physics_process(true)
-
-
 func _on_goal_left_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
+		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 0.3)
 		bot_scoreBoard.increaseScore()
 		print(\"! bot scored !\")
-		reset_ball()
+		$Ball.reset()
 
 
 func _on_goal_right_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
+		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 0.3)
 		player_scoreBoard.increaseScore()
 		print(\"! player scored !\")
-		reset_ball()
+		$Ball.reset()
 "
 
 [sub_resource type="GDScript" id="GDScript_yqjtg"]
 script/source = "extends Camera2D
 
+var shake_duration: float = 1
+var shake_strength: float = 1
+var shake_decay: float = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -116,8 +77,21 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func _process(delta: float) -> void:
+	if shake_duration > 0:
+		shake_duration -= delta
+		# Random offset each frame
+		offset = Vector2(
+			randf_range(-shake_strength, shake_strength),
+			randf_range(-shake_strength, shake_strength) )
+		# Decay the strength over time
+		shake_strength = lerp(shake_strength, 0.0, shake_decay * delta)
+	else:
+		offset = Vector2.ZERO
+
+func set_shake(duration: float, strength: float) -> void:
+	shake_duration = duration
+	shake_strength = strength
 "
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jyhfs"]
@@ -143,25 +117,41 @@ size = Vector2(20, 638)
 script = SubResource("GDScript_uwrxv")
 ball_scene = ExtResource("3_sugp2")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1731760051]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1731760051 groups=["camera"]]
 position = Vector2(576, 323)
 editor_draw_limits = true
 script = SubResource("GDScript_yqjtg")
 
-[node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
+[node name="Background" type="CanvasLayer" parent="." unique_id=1508596951]
+layer = -1
 
-[node name="StartDelay" type="Timer" parent="." unique_id=597731998]
-one_shot = true
+[node name="BackgroundBox" type="ColorRect" parent="Background" unique_id=2087180486]
+visibility_layer = 257
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -575.5
+offset_top = -324.0
+offset_right = 575.5
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.056291588, 0.056291603, 0.056291595, 1)
 
-[node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
-position = Vector2(573, 330)
-
-[node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
-position = Vector2(217, 323)
-
-[node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
-position = Vector2(939, 323)
-speed = 150.0
+[node name="Divider" type="ColorRect" parent="Background/BackgroundBox" unique_id=2049327290]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -3.5
+offset_right = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="Borders" type="StaticBody2D" parent="." unique_id=477861045]
 position = Vector2(572, 332)
@@ -179,6 +169,23 @@ shape = SubResource("WorldBoundaryShape2D_tefeu")
 [node name="RightBorder" type="CollisionShape2D" parent="Borders" unique_id=1451515917]
 shape = SubResource("WorldBoundaryShape2D_o6xl0")
 
+[node name="scoreBoardPlayer" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
+follow_viewport_scale = 186.185
+
+[node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
+follow_viewport_scale = 186.185
+position = Vector2(500, 20)
+
+[node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
+position = Vector2(573, 330)
+
+[node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
+position = Vector2(104, 323)
+
+[node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
+position = Vector2(1041, 323)
+speed = 150.0
+
 [node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288]
 position = Vector2(27, 22)
 
@@ -193,13 +200,11 @@ position = Vector2(1073, 22)
 position = Vector2(24, 302)
 shape = SubResource("RectangleShape2D_jyhfs")
 
-[node name="scoreBoardPlayer" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
-follow_viewport_scale = 186.185
+[node name="StartDelay" type="Timer" parent="." unique_id=597731998]
+one_shot = true
 
-[node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
-follow_viewport_scale = 186.185
-position = Vector2(500, 20)
+[node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
-[connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
 [connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]
 [connection signal="body_entered" from="Goal_Right" to="." method="_on_goal_right_body_entered"]
+[connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]
