@@ -28,6 +28,29 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "PLAY"
 
+[node name="ButtonDifficulty" type="Button" parent="VBoxContainer" unique_id=1507124532]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "DIFFICULTY"
+
+[node name="DifficultyMenu" type="VBoxContainer" parent="VBoxContainer/ButtonDifficulty" unique_id=1612568669]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ButtonEasyMode" type="Button" parent="VBoxContainer/ButtonDifficulty/DifficultyMenu" unique_id=1917989338]
+layout_mode = 2
+text = "Easy"
+
+[node name="ButtonMediumMode" type="Button" parent="VBoxContainer/ButtonDifficulty/DifficultyMenu" unique_id=145108054]
+layout_mode = 2
+text = "Medium"
+
+[node name="ButtonHardMode" type="Button" parent="VBoxContainer/ButtonDifficulty/DifficultyMenu" unique_id=389568475]
+layout_mode = 2
+text = "Hard"
+
 [node name="ButtonQuit" type="Button" parent="VBoxContainer" unique_id=1118115675]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
@@ -50,4 +73,8 @@ horizontal_alignment = 1
 uppercase = true
 
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_button_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonDifficulty" to="." method="_on_button_difficulty_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonDifficulty/DifficultyMenu/ButtonEasyMode" to="." method="_on_button_easy_mode_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonDifficulty/DifficultyMenu/ButtonMediumMode" to="." method="_on_button_medium_mode_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonDifficulty/DifficultyMenu/ButtonHardMode" to="." method="_on_button_hard_mode_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="." method="_on_button_quit_pressed"]

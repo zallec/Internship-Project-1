@@ -1,14 +1,22 @@
 extends CharacterBody2D
 
 
-@export var speed: float = 400
+var speed: float = 400
 var screen_height: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var screen_size: Vector2 = get_viewport_rect().size
-	screen_height = screen_size.y # 648
+	#var screen_size: Vector2 = get_viewport_rect().size
+	screen_height = get_viewport_rect().size.y # 648
 	position = Vector2(211,screen_height / 2)
+	
+	speed = GameSettings.get_settings("player_speed")
+	
+	# size
+	var size: Variant = GameSettings.get_settings("paddle_size_player")
+	$CollisionShape2D.shape.size.y = size
+	$ColorRect.size.y = size
+	$ColorRect.position.y = -size / 2.0
 
 
 func start() -> void:
@@ -20,7 +28,7 @@ func getVerticalDirection() -> float:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var direction: Vector2 = Vector2(0, getVerticalDirection())
 	velocity = direction * speed
 	velocity.x = 0

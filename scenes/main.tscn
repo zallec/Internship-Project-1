@@ -44,10 +44,6 @@ func new_game() -> void:
 	
 
 
-func _on_start_delay_timeout() -> void:
-	pass
-
-
 func _on_goal_left_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
 		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 0.3)
@@ -68,8 +64,9 @@ func _on_goal_right_body_entered(body: Node2D) -> void:
 script/source = "extends Camera2D
 
 var shake_duration: float = 1
-var shake_strength: float = 1
-var shake_decay: float = 1
+var shake_strength: float = 2
+var shake_decay: float = 3
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -88,6 +85,7 @@ func _process(delta: float) -> void:
 		shake_strength = lerp(shake_strength, 0.0, shake_decay * delta)
 	else:
 		offset = Vector2.ZERO
+
 
 func set_shake(duration: float, strength: float) -> void:
 	shake_duration = duration
@@ -171,40 +169,36 @@ shape = SubResource("WorldBoundaryShape2D_o6xl0")
 
 [node name="scoreBoardPlayer" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
 follow_viewport_scale = 186.185
+position = Vector2(100, 40)
 
 [node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
 follow_viewport_scale = 186.185
-position = Vector2(500, 20)
+position = Vector2(700, 40)
 
 [node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
 position = Vector2(573, 330)
 
-[node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
+[node name="PlayerWall" parent="." unique_id=492150251 groups=["wall"] instance=ExtResource("2_sugp2")]
 position = Vector2(104, 323)
 
-[node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
+[node name="EnemyWall" parent="." unique_id=151816420 groups=["wall"] instance=ExtResource("4_jyhfs")]
 position = Vector2(1041, 323)
-speed = 150.0
 
-[node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288]
+[node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288 groups=["goal"]]
 position = Vector2(27, 22)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Goal_Left" unique_id=485443973]
 position = Vector2(24, 302)
 shape = SubResource("RectangleShape2D_jyhfs")
 
-[node name="Goal_Right" type="Area2D" parent="." unique_id=1116292428]
+[node name="Goal_Right" type="Area2D" parent="." unique_id=1116292428 groups=["goal"]]
 position = Vector2(1073, 22)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Goal_Right" unique_id=1147072880]
 position = Vector2(24, 302)
 shape = SubResource("RectangleShape2D_jyhfs")
 
-[node name="StartDelay" type="Timer" parent="." unique_id=597731998]
-one_shot = true
-
 [node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
 [connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]
 [connection signal="body_entered" from="Goal_Right" to="." method="_on_goal_right_body_entered"]
-[connection signal="timeout" from="StartDelay" to="." method="_on_start_delay_timeout"]

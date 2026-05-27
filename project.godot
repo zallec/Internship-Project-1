@@ -15,9 +15,22 @@ run/main_scene="uid://bpvdm467qqjj1"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameSettings="*uid://cnn0186t6mdu1"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2
+
+[editor]
+
+version_control/autoload_on_startup=true
+
+[global_group]
+
+wall=""
+goal=""
 
 [input]
 
