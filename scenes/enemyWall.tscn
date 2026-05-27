@@ -3,11 +3,13 @@
 [ext_resource type="Script" uid="uid://ca7troc3jxtyu" path="res://scenes/scripts/enemyWall.gd" id="1_m24gv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
+size = Vector2(4, 80)
 
 [node name="enemyWall" type="CharacterBody2D" unique_id=2057786081]
 script = ExtResource("1_m24gv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1469816695]
+position = Vector2(-17, 21)
 shape = SubResource("RectangleShape2D_jorrf")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1677342442]
@@ -17,4 +19,5 @@ offset_left = -19.0
 offset_top = -19.0
 offset_right = 21.0
 offset_bottom = 21.0
+scale = Vector2(0.5, 2)
 metadata/_edit_use_anchors_ = true

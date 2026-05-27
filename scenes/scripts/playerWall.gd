@@ -23,5 +23,6 @@ func getVerticalDirection() -> float:
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = Vector2(0, getVerticalDirection())
 	velocity = direction * speed
+	velocity.x = 0
 	position.y = clamp(position.y, 0, screen_height)
 	move_and_slide()

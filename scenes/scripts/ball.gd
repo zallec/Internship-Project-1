@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var speed: float = 500
+@export var speed: float = 25
 @export var max_speed: float = 500
 var direction: Vector2 = Vector2.ZERO
 
@@ -13,11 +13,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	var collision: KinematicCollision2D = move_and_collide(velocity * delta)
+	var collision: KinematicCollision2D = move_and_collide(velocity * speed * delta)
 	# handles bounce physics, supposed to increase velocity when bouncing
 	if collision:
 		direction = velocity.bounce(collision.get_normal()).normalized()
-		speed = speed + 100
+		speed = speed * 1.01
 		velocity = velocity.bounce(collision.get_normal())
 
 
