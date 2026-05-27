@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://8c3ku6s1wgik" path="res://scenes/ball.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://d0muvby2lw2ab" path="res://scenes/enemyWall.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://da7b4u1l722d4" path="res://scenes/score_board.tscn" id="5_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://dh4cpbnkgfr0g" path="res://assets/audio/pong-player-hit.wav" id="6_o6xl0"]
+[ext_resource type="AudioStream" uid="uid://bouct2124pxj0" path="res://assets/audio/pong-bot-hit.wav" id="7_tipki"]
 
 [sub_resource type="GDScript" id="GDScript_uwrxv"]
 script/source = "extends Node2D
@@ -41,12 +43,11 @@ func new_game() -> void:
 	# set ball to track
 	$EnemyWall.start() 
 	$EnemyWall.ball = $Ball
-	
 
 
 func _on_goal_left_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
-		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 0.3)
+		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 1)
 		bot_scoreBoard.increaseScore()
 		print(\"! bot scored !\")
 		$Ball.reset()
@@ -54,10 +55,18 @@ func _on_goal_left_body_entered(body: Node2D) -> void:
 
 func _on_goal_right_body_entered(body: Node2D) -> void:
 	if body.name == \"Ball\":
-		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 0.3)
+		get_tree().get_first_node_in_group(\"camera\").set_shake(8.0, 1)
 		player_scoreBoard.increaseScore()
 		print(\"! player scored !\")
 		$Ball.reset()
+
+
+func _on_ball_bot_hit() -> void:
+	$BotHitAudio.play()
+
+
+func _on_ball_player_hit() -> void:
+	$PlayerHitAudio.play()
 "
 
 [sub_resource type="GDScript" id="GDScript_yqjtg"]
@@ -169,19 +178,19 @@ shape = SubResource("WorldBoundaryShape2D_o6xl0")
 
 [node name="scoreBoardPlayer" parent="." unique_id=596533159 instance=ExtResource("5_tbgi4")]
 follow_viewport_scale = 186.185
-position = Vector2(100, 40)
+position = Vector2(250, 40)
 
 [node name="scoreBoardBot" parent="." unique_id=59090383 instance=ExtResource("5_tbgi4")]
 follow_viewport_scale = 186.185
-position = Vector2(700, 40)
+position = Vector2(875, 40)
 
 [node name="Ball" parent="." unique_id=1366729709 instance=ExtResource("3_sugp2")]
 position = Vector2(573, 330)
 
-[node name="PlayerWall" parent="." unique_id=492150251 groups=["wall"] instance=ExtResource("2_sugp2")]
+[node name="PlayerWall" parent="." unique_id=492150251 instance=ExtResource("2_sugp2")]
 position = Vector2(104, 323)
 
-[node name="EnemyWall" parent="." unique_id=151816420 groups=["wall"] instance=ExtResource("4_jyhfs")]
+[node name="EnemyWall" parent="." unique_id=151816420 instance=ExtResource("4_jyhfs")]
 position = Vector2(1041, 323)
 
 [node name="Goal_Left" type="Area2D" parent="." unique_id=1830536288 groups=["goal"]]
@@ -200,5 +209,13 @@ shape = SubResource("RectangleShape2D_jyhfs")
 
 [node name="Cursor" parent="." unique_id=217732197 instance=ExtResource("1_0wfyh")]
 
+[node name="PlayerHitAudio" type="AudioStreamPlayer" parent="." unique_id=828804336]
+stream = ExtResource("6_o6xl0")
+
+[node name="BotHitAudio" type="AudioStreamPlayer" parent="." unique_id=1741082410]
+stream = ExtResource("7_tipki")
+
+[connection signal="bot_hit" from="Ball" to="." method="_on_ball_bot_hit"]
+[connection signal="player_hit" from="Ball" to="." method="_on_ball_player_hit"]
 [connection signal="body_entered" from="Goal_Left" to="." method="_on_goal_left_body_entered"]
 [connection signal="body_entered" from="Goal_Right" to="." method="_on_goal_right_body_entered"]

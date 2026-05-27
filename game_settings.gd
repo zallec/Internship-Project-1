@@ -7,13 +7,13 @@ var current_difficulty := DIFFICULTY.MEDIUM
 
 const SETTINGS = {
 	DIFFICULTY.EASY: {
-		"ball_speed": 			15,
+		"ball_speed": 			19,
 		"ball_speed_multiplier":1.0,
 		"player_speed":			600.0,
 		"paddle_size_player":	120.0,
-		"paddle_size_bot":		50.0,
-		"bot_speed":			180.0,
-		"bot_react_speed":		50.0,
+		"paddle_size_bot":		60.0,
+		"bot_speed":			130.0,
+		"bot_react_speed":		30.0,
 	},
 	DIFFICULTY.MEDIUM: {
 		"ball_speed": 			20,

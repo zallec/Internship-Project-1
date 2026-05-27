@@ -8,3 +8,4 @@ script = ExtResource("1_ek31y")
 [node name="Label" type="Label" parent="." unique_id=1103594935]
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_font_sizes/font_size = 32

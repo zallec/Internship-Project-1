@@ -13,7 +13,8 @@ var cur_state := ball_state.WAITING
 
 signal ball_launch
 signal launch_time
-signal wall_hit
+signal player_hit
+signal bot_hit
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,10 +47,12 @@ func _physics_process(delta: float) -> void:
 			var collision: KinematicCollision2D = move_and_collide(velocity * speed * delta)
 			# handles bounce physics, supposed to increase velocity when bouncing
 			if collision:
-				# collider signal for camera
+				# collider signal for effects
 				var collider := collision.get_collider()
-				if collider.is_in_group("wall"):
-					emit_signal("wall_hit")
+				if collider.is_in_group("player"):
+					emit_signal("player_hit")
+				if collider.is_in_group("bot"):
+					emit_signal("bot_hit")
 				
 				# adjusted speed
 				direction = velocity.bounce(collision.get_normal()).normalized()
@@ -59,11 +62,17 @@ func _physics_process(delta: float) -> void:
 
 
 func launch() -> void:
-	# launch math
-	var angle: float = randf_range(-PI/6, PI/6)
-	if randi() % 2 == 0:
-		angle += PI
-	direction = Vector2(cos(angle), sin(angle))
+	# random choose side (radians)
+	var side: float = 1.0 if randf() > 0.5 else -1.0
+	
+	# angle (degrees)
+	var angle: float = randf_range(15, 45)
+	# angle multiplier (radians)
+	var ran_angle: float = 1.0 if randf() > 0.5 else -1.0
+	
+	# angle (radians)
+	direction = Vector2(cos(deg_to_rad(angle)) * side, sin(deg_to_rad(angle)) * ran_angle)
+	# launch
 	velocity = direction * speed
 	
 	# change state to moving

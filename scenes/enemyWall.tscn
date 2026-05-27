@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jorrf"]
 size = Vector2(10, 40)
 
-[node name="enemyWall" type="CharacterBody2D" unique_id=2057786081]
+[node name="enemyWall" type="CharacterBody2D" unique_id=2057786081 groups=["bot", "wall"]]
 motion_mode = 1
 platform_on_leave = 2
 script = ExtResource("1_m24gv")
