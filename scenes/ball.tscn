@@ -4,9 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://b7g8ykurb1kg5" path="res://assets/sprites/ball.png" id="2_cxlvu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
-radius = 4.6785564
+radius = 9.666667
 
 [node name="Ball" type="CharacterBody2D" unique_id=1366729709]
+motion_mode = 1
 script = ExtResource("1_7s4qf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2094439841]
@@ -14,5 +15,5 @@ scale = Vector2(3, 3)
 shape = SubResource("CircleShape2D_cxlvu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=165624682]
-scale = Vector2(0.1, 0.097826086)
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_cxlvu")
